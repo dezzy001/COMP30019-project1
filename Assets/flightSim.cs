@@ -60,9 +60,7 @@ public class flightSim : MonoBehaviour {
 
 		//NOTE: use Time.deltaTime to make sure all movements have consistent frames per second
 
-		// prevent any external forces to affect the rigid body
-		rb.angularVelocity = Vector3.zero; //prevents external forces i.e collision to cause rotation
-		rb.velocity = Vector3.zero; //prevents external forces i.e collision to cause translation
+
 
 		/*mouse transformation - yaw and pitch*/
 		//previous mouse coordinate = current mouse position - the previous mouse position
@@ -96,6 +94,9 @@ public class flightSim : MonoBehaviour {
 		transform.Rotate(Vector3.forward, rollPos);
 
 
+		// prevent any external forces affecting the rigid body (only want the camera to be affected by user controlls)
+		rb.angularVelocity = Vector3.zero; //prevents external forces i.e collision to cause rotation
+		rb.velocity = Vector3.zero; //prevents external forces i.e collision to cause translation
 			
 	}
 
