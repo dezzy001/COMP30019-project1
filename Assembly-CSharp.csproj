@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\DiamondSquareTerrain.cs" />
      <Compile Include="Assets\flightSim.cs" />
+     <None Include="Assets\PhongShader.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

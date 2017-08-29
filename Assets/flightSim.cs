@@ -1,7 +1,7 @@
 ﻿/*
 Project 1
 Derek Chen, 766509
-Kevin Liu, 
+Kevin Liu,
 */
 
 using System.Collections;
@@ -17,13 +17,13 @@ public class flightSim : MonoBehaviour {
 	//variable that references to the terrain public parameters
 	private GameObject terrainObject;
 
-	public float speed; // speed of the camera 
+	public float speed; // speed of the camera
 	public float camSensitivity; //How sensitive the camera is with mouse movements
 
-	private Vector3 prevMousePos; 
+	private Vector3 prevMousePos;
 
 	private int rollPos = 0; //position of the camera's current roll
-	public int rollSpeed; 
+	public int rollSpeed;
 
 
 	private int cameraOFFSET; // camera offset from the maximum height of the terrain
@@ -31,16 +31,16 @@ public class flightSim : MonoBehaviour {
 	private float boundarySize; // the boundary which camera resides in (based on the terrain)
 
 
-
+	int BOUNDARYOFFSET = 2;
 
 	public Rigidbody rb;
 
 	void Start(){
-		
+
 
 		//get the terrain component and parameters
 		GameObject terrainObject = GameObject.Find("terrain"); //see if the terrain object exists
-		DiamondSquareTerrain terrain = terrainObject.GetComponent<DiamondSquareTerrain>(); // get the script 
+		DiamondSquareTerrain terrain = terrainObject.GetComponent<DiamondSquareTerrain>(); // get the script
 
 		boundarySize = terrain.size/2; //initialise boundarySize to half of the terrain size (since terrain is centered at origin)
 
@@ -76,14 +76,14 @@ public class flightSim : MonoBehaviour {
 
 		//camera translation (cannot go out of bounds)
 		Vector3 keyboardDirection = getTranslateKeyInput(); //get the keyboard inputs
-		
+
 		keyboardDirection = keyboardDirection * Time.deltaTime *speed;
 
 		//only allow translation if camera is within boundary size of the terrain
 		transform.position = new Vector3(
-			Mathf.Clamp (transform.position.x, -boundarySize, boundarySize),
+			Mathf.Clamp (transform.position.x, -boundarySize+BOUNDARYOFFSET, boundarySize-BOUNDARYOFFSET),
 			transform.position.y,
-			Mathf.Clamp (transform.position.z, -boundarySize, boundarySize));
+			Mathf.Clamp (transform.position.z, -boundarySize + BOUNDARYOFFSET, boundarySize - BOUNDARYOFFSET));
 
 		//move (translate) the camera by the keyboard direction
 		transform.Translate(keyboardDirection);
@@ -97,14 +97,14 @@ public class flightSim : MonoBehaviour {
 		// prevent any external forces affecting the rigid body (only want the camera to be affected by user controlls)
 		rb.angularVelocity = Vector3.zero; //prevents external forces i.e collision to cause rotation
 		rb.velocity = Vector3.zero; //prevents external forces i.e collision to cause translation
-			
+
 	}
 
 
 
 
 	//returns the rotation position based on key press, adjusted for constant fps
-	private int getRotateKeyInput(int rollPos) { 
+	private int getRotateKeyInput(int rollPos) {
 		//Roll
 		if(Input.GetKey(KeyCode.Q))
 		{
@@ -122,7 +122,7 @@ public class flightSim : MonoBehaviour {
 
 
 	//returns the unit vector for camera velocity values based on keypress, or just a (0,0,0) vector if no key presses
-	private Vector3 getTranslateKeyInput() { 
+	private Vector3 getTranslateKeyInput() {
 
 
 		Vector3 velocity = new Vector3(0.0f , 0.0f, 0.0f);
@@ -144,4 +144,3 @@ public class flightSim : MonoBehaviour {
 	}
 
 }
-

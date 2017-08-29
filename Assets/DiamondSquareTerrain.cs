@@ -165,6 +165,34 @@ public class DiamondSquareTerrain : MonoBehaviour {
 		mesh.uv = uvs;
 		mesh.triangles = triangles;
 
+		Color[] terrainColor = new Color[verts.Length];
+
+		for (int i = 0; i < verts.Length; i++) {
+			if (verts [i].y > maxHeight * 0.85) {
+				
+				terrainColor [i] = Color.white; //snow
+
+			} else if (verts [i].y > maxHeight * 0.75 && verts [i].y < maxHeight * 0.85) {
+				
+				terrainColor [i] = Color.grey; //rock
+
+			}else if (verts [i].y > maxHeight * 0.3 && verts [i].y < maxHeight * 0.75) {
+				
+				terrainColor [i] = Color.green; //green grass
+
+			}else if (verts [i].y > maxHeight * 0 && verts [i].y < maxHeight * 0.1) {
+
+				terrainColor [i] = Color.yellow; // beach
+
+			}else if (verts [i].y < maxHeight * 0){
+				terrainColor [i] = Color.blue; //ocean
+			}
+
+		}
+
+		mesh.colors = terrainColor;
+
+
 		mesh.RecalculateBounds ();
 		mesh.RecalculateNormals ();
 
