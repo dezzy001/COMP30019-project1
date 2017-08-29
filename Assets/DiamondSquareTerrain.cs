@@ -25,8 +25,9 @@ public class DiamondSquareTerrain : MonoBehaviour {
 	public float size;
 
 
-	public float maxHeight; //the maximum height of the terrain
+	public float maxHeight; //the maximum height possible for the terrain
 	private float height; //current height of the terrain
+	private float currMaxHeight; //current maximum height of terrain after the terrain is generated
 
 	//holds all the vertecies in an array
 	private Vector3[] verts;
@@ -39,8 +40,10 @@ public class DiamondSquareTerrain : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		//terrain height is initially equal to max height 
+		//terrain height is initially equal to max possible height 
 		height = maxHeight;
+
+		currMaxHeight = -maxHeight; // initilaise the to be max height of terrain to be the lowest possible height
 
 		//get the mesh collider from the game object, which is later applied to the terrains mesh 	
 		meshCollider = GetComponent<MeshCollider>();
@@ -134,16 +137,20 @@ public class DiamondSquareTerrain : MonoBehaviour {
 		for(int i = 0; i < iterations;i++){
 
 			int row = 0;
+
 			//loop j and k are for the square steps
 			for(int j =0; j < numSquares; j++){
 
 				int col = 0;
+
 				for(int k = 0; k < numSquares; k++){
 
 					//do the diamond square algorithm to each square
 					diamondSquare(row, col, squareSize, height);
+
 					// jump through each column in a row by a square size
 					col += squareSize;
+
 				}
 
 				//go down a row by a squareSize
@@ -154,7 +161,7 @@ public class DiamondSquareTerrain : MonoBehaviour {
 			//the number of squares doubles each iteration, while the size of the square halves (e.g 4x4 --(square step)--> 2x2)
 			numSquares *= 2;
 			squareSize /= 2;
-			height *= 0.5f;// can edit this to lower the height after each iteration, or make it random ######CHANGE LATER########################
+			height *= 0.5f;
 
 		}
 
@@ -165,33 +172,42 @@ public class DiamondSquareTerrain : MonoBehaviour {
 		mesh.uv = uvs;
 		mesh.triangles = triangles;
 
+		//find the maximum height of the generated terrain
+		for (int i = 0; i < verts.Length; i++) {
+			if (verts [i].y > currMaxHeight) {
+				currMaxHeight = verts [i].y;
+			}
+		}
+		Debug.Log (currMaxHeight);
+		
 		Color[] terrainColor = new Color[verts.Length];
 
 		for (int i = 0; i < verts.Length; i++) {
-			if (verts [i].y > maxHeight * 0.85) {
+			if (verts [i].y > currMaxHeight * 0.75) {
 				
 				terrainColor [i] = Color.white; //snow
 
-			} else if (verts [i].y > maxHeight * 0.75 && verts [i].y < maxHeight * 0.85) {
+			} else if (verts [i].y > currMaxHeight * 0.65 && verts [i].y < currMaxHeight * 0.75) {
 				
 				terrainColor [i] = Color.grey; //rock
 
-			}else if (verts [i].y > maxHeight * 0.3 && verts [i].y < maxHeight * 0.75) {
+			}else if (verts [i].y > currMaxHeight * 0.1 && verts [i].y < currMaxHeight * 0.65) {
 				
 				terrainColor [i] = Color.green; //green grass
 
-			}else if (verts [i].y > maxHeight * 0 && verts [i].y < maxHeight * 0.1) {
+			}else if (verts [i].y > currMaxHeight * 0 && verts [i].y < currMaxHeight * 0.1) {
 
 				terrainColor [i] = Color.yellow; // beach
 
-			}else if (verts [i].y < maxHeight * 0){
+			}else if (verts [i].y < currMaxHeight * 0){
+				
 				terrainColor [i] = Color.blue; //ocean
+
 			}
 
 		}
 
 		mesh.colors = terrainColor;
-
 
 		mesh.RecalculateBounds ();
 		mesh.RecalculateNormals ();

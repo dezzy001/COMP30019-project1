@@ -26,12 +26,12 @@ public class flightSim : MonoBehaviour {
 	public int rollSpeed;
 
 
-	private int cameraOFFSET; // camera offset from the maximum height of the terrain
+	private float cameraOFFSET; // camera offset from the maximum height of the terrain
 
 	private float boundarySize; // the boundary which camera resides in (based on the terrain)
 
 
-	int BOUNDARYOFFSET = 2;
+	float BOUNDARYOFFSET = 0.5f;
 
 	public Rigidbody rb;
 
@@ -60,13 +60,17 @@ public class flightSim : MonoBehaviour {
 
 		//NOTE: use Time.deltaTime to make sure all movements have consistent frames per second
 
-
-
 		/*mouse transformation - yaw and pitch*/
 		//previous mouse coordinate = current mouse position - the previous mouse position
 		prevMousePos = Input.mousePosition - prevMousePos ;
 		prevMousePos = new Vector3(-prevMousePos.y * camSensitivity, prevMousePos.x * camSensitivity, 0 );
-		prevMousePos = new Vector3(transform.eulerAngles.x + prevMousePos.x , transform.eulerAngles.y + prevMousePos.y, 0);
+		prevMousePos = new Vector3(transform.eulerAngles.x + prevMousePos.x ,transform.eulerAngles.y + prevMousePos.y , 0);
+
+
+		//prevMousePos = new Vector3 (Mathf.Clamp (prevMousePos.x, 0, 90),prevMousePos.y,prevMousePos.z );
+
+
+
 
 		transform.eulerAngles = prevMousePos;
 		prevMousePos =  Input.mousePosition;
