@@ -1,14 +1,16 @@
 ﻿/*
-Project 1
+Graphics and Interactions (COMP30019) Project 1
 Derek Chen, 766509
-Kevin Liu,
+Kevin Liu, 766486
 */
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//sources: utilised sections of code to help with the mouse movements - https://forum.unity3d.com/threads/fly-cam-simple-cam-script.67042/
+/*sources: utilised sections of code to help with the mouse movements - https://forum.unity3d.com/threads/fly-cam-simple-cam-script.67042/
+ * 			-lines 70 - 72 (mentioned again below)
+ * */
 
 
 
@@ -47,7 +49,7 @@ public class flightSim : MonoBehaviour {
 		//cameras rigid body
 		rb = GetComponent<Rigidbody>();
 
-		cameraOFFSET = (int)(terrain.maxHeight / 3);
+		cameraOFFSET = (int)(terrain.maxHeight / 2);
 		//Initial camera view - position and rotation
 		transform.position = new Vector3 (0.0f, terrain.maxHeight+cameraOFFSET, 0.0f);
 		transform.eulerAngles = new Vector3(90, 0, 0);
@@ -62,17 +64,22 @@ public class flightSim : MonoBehaviour {
 
 		/*mouse transformation - yaw and pitch*/
 		//previous mouse coordinate = current mouse position - the previous mouse position
+
+		/* https://forum.unity3d.com/threads/fly-cam-simple-cam-script.67042/
+		 * Used code from the website above, to perform the previous mouse position calculations*/
 		prevMousePos = Input.mousePosition - prevMousePos ;
 		prevMousePos = new Vector3(-prevMousePos.y * camSensitivity, prevMousePos.x * camSensitivity, 0 );
 		prevMousePos = new Vector3(transform.eulerAngles.x + prevMousePos.x ,transform.eulerAngles.y + prevMousePos.y , 0);
 
+		//prevent the camera to fully rotate downwards, to prevent the camera to glitch out and flip the view 
+		if(prevMousePos.x > 85 && prevMousePos.x > 0 && prevMousePos.x < 90){
+			prevMousePos.x = 85;
+		}
+			
 
-		//prevMousePos = new Vector3 (Mathf.Clamp (prevMousePos.x, 0, 90),prevMousePos.y,prevMousePos.z );
-
-
-
-
+		//do the actual rotations, based on the previous mouse movements
 		transform.eulerAngles = prevMousePos;
+		//get the new mouse position
 		prevMousePos =  Input.mousePosition;
 
 

@@ -47,6 +47,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\DiamondSquareTerrain.cs" />
+     <Compile Include="Assets\PointLight.cs" />
+     <Compile Include="Assets\XAxisSpin.cs" />
      <Compile Include="Assets\flightSim.cs" />
      <None Include="Assets\PhongShader.shader" />
  <Reference Include="UnityEngine.UI">

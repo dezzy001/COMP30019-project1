@@ -1,4 +1,10 @@
-﻿// Original Cg/HLSL code stub copyright (c) 2010-2012 SharpDX - Alexandre Mutel
+﻿
+//Graphics and Interactions (COMP30019) Project 1
+//Derek Chen, 766509
+//Kevin Liu, 766486
+
+
+// Original Cg/HLSL code stub copyright (c) 2010-2012 SharpDX - Alexandre Mutel
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +29,9 @@
 // Adapted further (again) by Alex Zable (port to Unity), 19 Aug 2016
 
 //UNITY_SHADER_NO_UPGRADE
+
+
+//NOTE: used the phong shader from lab 4, adjusting the diffuse and specular constants
 
 Shader "Unlit/PhongShader"
 {
@@ -96,7 +105,7 @@ Shader "Unlit/PhongShader"
 				// Calculate diffuse RBG reflections, we save the results of L.N because we will use it again
 				// (when calculating the reflected ray in our specular component)
 				float fAtt = 1;
-				float Kd = 0.3;
+				float Kd = 0.5;
 				float3 L = normalize(_PointLightPosition - v.worldVertex.xyz);
 				float LdotN = dot(L, interpNormal);
 				float3 dif = fAtt * _PointLightColor.rgb * Kd * v.color.rgb * saturate(LdotN);

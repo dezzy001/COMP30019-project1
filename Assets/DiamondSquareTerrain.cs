@@ -1,7 +1,7 @@
 ﻿/*
-Project 1
+Graphics and Interactions (COMP30019) Project 1
 Derek Chen, 766509
-Kevin Liu, 
+Kevin Liu, 766486
 */
 
 
@@ -14,6 +14,10 @@ using UnityEngine;
 (NOTE: tightly followed this tutorial for understanding of the diamond square algorithm)
 
 2) Diamond-square algorithm - https://en.wikipedia.org/wiki/Diamond-square_algorithm
+
+LAB 4 - used the phong shader script,the pointLight script and took some code snippets
+		from cubescript to utilise the phong shader and point light from lab 4
+
 */
 
 public class DiamondSquareTerrain : MonoBehaviour {
@@ -37,6 +41,10 @@ public class DiamondSquareTerrain : MonoBehaviour {
 	//mesh collider for the terrain
 	MeshCollider meshCollider;
 
+	//reference this to the phong shader
+	public Shader shader;
+	public PointLight pointLight;
+
 	// Use this for initialization
 	void Start () {
 
@@ -45,16 +53,42 @@ public class DiamondSquareTerrain : MonoBehaviour {
 
 		currMaxHeight = -maxHeight; // initilaise the to be max height of terrain to be the lowest possible height
 
-		//get the mesh collider from the game object, which is later applied to the terrains mesh 	
-		meshCollider = GetComponent<MeshCollider>();
 
-		createTerrain ();
+		/*LAB 4 - cubescript code snippet*/
+
+		// Add a MeshFilter component to this entity. This essentially comprises of a
+		// mesh definition, which in this example is a collection of vertices, colours 
+		// and triangles (groups of three vertices). 
+		MeshFilter terrainMesh = this.gameObject.AddComponent<MeshFilter>();
+		terrainMesh.mesh = this.createTerrain();
+
+		// Add a MeshRenderer component. This component actually renders the mesh that
+		// is defined by the MeshFilter component.
+		MeshRenderer renderer = this.gameObject.AddComponent<MeshRenderer>();
+		renderer.material.shader = shader;
+
+
+	}
+
+
+	void Update()
+	{
+
+
+		/*LAB 4 - cubescript code snippet*/
+		// Get renderer component (in order to pass params to shader)
+		MeshRenderer renderer = this.gameObject.GetComponent<MeshRenderer>();
+
+		// Pass updated light positions to shader
+		renderer.material.SetColor("_PointLightColor", this.pointLight.color);
+		renderer.material.SetVector("_PointLightPosition", this.pointLight.GetWorldPosition());
+
 
 	}
 
 
 	//terrain is created and initialised in this method
-	void createTerrain(){
+	Mesh createTerrain(){
 
 
 		/*Step 1: initialse terrain base, i.e a 2D square array of width and height (2^n) + 1 - i.e number of faces (divisons) + 1 */
@@ -178,29 +212,34 @@ public class DiamondSquareTerrain : MonoBehaviour {
 				currMaxHeight = verts [i].y;
 			}
 		}
-		Debug.Log (currMaxHeight);
+
+		//Debug.Log (currMaxHeight);
 		
 		Color[] terrainColor = new Color[verts.Length];
 
 		for (int i = 0; i < verts.Length; i++) {
-			if (verts [i].y > currMaxHeight * 0.75) {
+			if (verts [i].y > currMaxHeight *0.75) {
 				
 				terrainColor [i] = Color.white; //snow
 
-			} else if (verts [i].y > currMaxHeight * 0.65 && verts [i].y < currMaxHeight * 0.75) {
+			} else if (verts [i].y > currMaxHeight *0.55 && verts [i].y < currMaxHeight *0.75) {
 				
 				terrainColor [i] = Color.grey; //rock
 
-			}else if (verts [i].y > currMaxHeight * 0.1 && verts [i].y < currMaxHeight * 0.65) {
+			}else if (verts [i].y > currMaxHeight*0.1 && verts [i].y < currMaxHeight*0.55) {
 				
-				terrainColor [i] = Color.green; //green grass
+				terrainColor [i] = Color.green; // grass
 
-			}else if (verts [i].y > currMaxHeight * 0 && verts [i].y < currMaxHeight * 0.1) {
+			}else if (verts [i].y > 0  && verts [i].y < currMaxHeight*0.1) {
 
 				terrainColor [i] = Color.yellow; // beach
 
-			}else if (verts [i].y < currMaxHeight * 0){
+			}else if (verts [i].y > -currMaxHeight*0.1  && verts [i].y < 0){
 				
+				terrainColor [i] = Color.cyan; //shallow water
+
+			}else if (verts [i].y < currMaxHeight * 0){
+
 				terrainColor [i] = Color.blue; //ocean
 
 			}
@@ -212,8 +251,13 @@ public class DiamondSquareTerrain : MonoBehaviour {
 		mesh.RecalculateBounds ();
 		mesh.RecalculateNormals ();
 
+
+		//get the mesh collider from the game object, which is later applied to the terrains mesh 	
+		meshCollider = GetComponent<MeshCollider>();
 		// used to apply mesh collider to the terrain
 		meshCollider.sharedMesh = mesh;
+
+		return mesh;
 	}
 
 
