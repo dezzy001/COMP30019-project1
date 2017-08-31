@@ -24,17 +24,18 @@ public class flightSim : MonoBehaviour {
 
 	private Vector3 prevMousePos;
 
-	private int rollPos = 0; //position of the camera's current roll
-	public int rollSpeed;
+	private float rollPos = 0.0f; //position of the camera's current roll
+	public float rollSpeed;
 
 
 	private float cameraOFFSET; // camera offset from the maximum height of the terrain
 
 	private float boundarySize; // the boundary which camera resides in (based on the terrain)
 
+	// have an offset for the boundary, to 100% make sure that camera can not go around it
+	float BOUNDARYOFFSET = 0.5f; 
 
-	float BOUNDARYOFFSET = 0.5f;
-
+	//rigid body to add collision detection to camera, external physics will be removed from the camera later on the code
 	public Rigidbody rb;
 
 	void Start(){
@@ -49,7 +50,7 @@ public class flightSim : MonoBehaviour {
 		//cameras rigid body
 		rb = GetComponent<Rigidbody>();
 
-		cameraOFFSET = (int)(terrain.maxHeight / 2);
+		cameraOFFSET = terrain.maxHeight * 2;
 		//Initial camera view - position and rotation
 		transform.position = new Vector3 (0.0f, terrain.maxHeight+cameraOFFSET, 0.0f);
 		transform.eulerAngles = new Vector3(90, 0, 0);
@@ -115,17 +116,17 @@ public class flightSim : MonoBehaviour {
 
 
 	//returns the rotation position based on key press, adjusted for constant fps
-	private int getRotateKeyInput(int rollPos) {
+	private float getRotateKeyInput(float rollPos) {
 		//Roll
 		if(Input.GetKey(KeyCode.Q))
 		{
 			//left roll
-			rollPos += (int)(rollSpeed * Time.deltaTime);
+			rollPos += (rollSpeed * Time.deltaTime);
 		}
 		if(Input.GetKey(KeyCode.E))
 		{
 			//right roll
-			rollPos -= (int)(rollSpeed * Time.deltaTime);
+			rollPos -= (rollSpeed * Time.deltaTime);
 		}
 		return rollPos;
 	}

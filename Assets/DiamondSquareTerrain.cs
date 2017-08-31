@@ -220,25 +220,25 @@ public class DiamondSquareTerrain : MonoBehaviour {
 		for (int i = 0; i < verts.Length; i++) {
 			if (verts [i].y > currMaxHeight *0.75) {
 				
-				terrainColor [i] = Color.white; //snow
+				terrainColor [i] = new Color(1.0f,1.0f,1.0f,1.0f); //snow
 
 			} else if (verts [i].y > currMaxHeight *0.55 && verts [i].y < currMaxHeight *0.75) {
 				
 				terrainColor [i] = Color.grey; //rock
 
-			}else if (verts [i].y > currMaxHeight*0.1 && verts [i].y < currMaxHeight*0.55) {
+			}else if (verts [i].y > -currMaxHeight*0.1 && verts [i].y < currMaxHeight*0.55) {
 				
-				terrainColor [i] = Color.green; // grass
+				terrainColor [i] = new Color(0.0f,0.45f,0.0f,1.0f); // grass
 
-			}else if (verts [i].y > 0  && verts [i].y < currMaxHeight*0.1) {
+			}else if (verts [i].y > -currMaxHeight*0.2 && verts [i].y < -currMaxHeight*0.1) {
 
-				terrainColor [i] = Color.yellow; // beach
+				terrainColor [i] = new Color(0.5f,0.5f,0.0f,1.0f); // beach
 
-			}else if (verts [i].y > -currMaxHeight*0.1  && verts [i].y < 0){
+			}else if (verts [i].y > -currMaxHeight*0.3  && verts [i].y < -currMaxHeight*0.2){
 				
-				terrainColor [i] = Color.cyan; //shallow water
+				terrainColor [i] = new Color(0.2f,0.5f,0.8f,1.0f); //shallow water
 
-			}else if (verts [i].y < currMaxHeight * 0){
+			}else if (verts [i].y < -currMaxHeight * 0.3){
 
 				terrainColor [i] = Color.blue; //ocean
 
