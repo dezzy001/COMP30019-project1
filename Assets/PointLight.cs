@@ -20,7 +20,7 @@ public class PointLight : MonoBehaviour {
 		DiamondSquareTerrain terrain = terrainObject.GetComponent<DiamondSquareTerrain>(); // get the script
 
 		//offset of the sun away from the terrain boundaries
-		float sizeOffset = 10.0f;
+		float sizeOffset = terrain.size/2;
 
 		transform.position = new Vector3 (0.0f, 0.0f, terrain.size/2 + sizeOffset);
 

@@ -28,12 +28,15 @@ public class flightSim : MonoBehaviour {
 	public float rollSpeed;
 
 
+
+
 	private float cameraOFFSET; // camera offset from the maximum height of the terrain
 
 	private float boundarySize; // the boundary which camera resides in (based on the terrain)
 
 	// have an offset for the boundary, to 100% make sure that camera can not go around it
 	float BOUNDARYOFFSET = 0.5f; 
+
 
 	//rigid body to add collision detection to camera, external physics will be removed from the camera later on the code
 	public Rigidbody rb;
@@ -52,14 +55,16 @@ public class flightSim : MonoBehaviour {
 
 		cameraOFFSET = terrain.maxHeight * 2;
 		//Initial camera view - position and rotation
-		transform.position = new Vector3 (0.0f, terrain.maxHeight+cameraOFFSET, 0.0f);
-		transform.eulerAngles = new Vector3(90, 0, 0);
+		transform.position = new Vector3 (boundarySize, terrain.maxHeight+cameraOFFSET, boundarySize);
+		transform.LookAt(new Vector3(15,0,0) );
 
-
-		prevMousePos = new Vector3(255, 255, 255);//centers the  mouse position, rather than the play button
+		//make sure that the previous mouse position is initilaised to the current mouse position
+		//ensures that camera view is synced with mouse position
+		prevMousePos =  Input.mousePosition;
 	}
 
 	void Update () {
+
 
 		//NOTE: use Time.deltaTime to make sure all movements have consistent frames per second
 
@@ -68,20 +73,24 @@ public class flightSim : MonoBehaviour {
 
 		/* https://forum.unity3d.com/threads/fly-cam-simple-cam-script.67042/
 		 * Used code from the website above, to perform the previous mouse position calculations*/
+
+
+
+	
 		prevMousePos = Input.mousePosition - prevMousePos ;
 		prevMousePos = new Vector3(-prevMousePos.y * camSensitivity, prevMousePos.x * camSensitivity, 0 );
 		prevMousePos = new Vector3(transform.eulerAngles.x + prevMousePos.x ,transform.eulerAngles.y + prevMousePos.y , 0);
 
-		//prevent the camera to fully rotate downwards, to prevent the camera to glitch out and flip the view 
-		if(prevMousePos.x > 85 && prevMousePos.x > 0 && prevMousePos.x < 90){
+			//prevent the camera to fully rotate downwards, to prevent the camera to glitch out and flip the view 
+		if (prevMousePos.x > 85 && prevMousePos.x > 0 && prevMousePos.x < 90) {
 			prevMousePos.x = 85;
 		}
-			
+				
 
-		//do the actual rotations, based on the previous mouse movements
-		transform.eulerAngles = prevMousePos;
-		//get the new mouse position
-		prevMousePos =  Input.mousePosition;
+			//do the actual rotations, based on the previous mouse movements
+			transform.eulerAngles = prevMousePos;
+			//get the new mouse position
+			prevMousePos =  Input.mousePosition;
 
 
 		/*keyboard transformation- roll and camera translation*/
@@ -154,5 +163,7 @@ public class flightSim : MonoBehaviour {
 
 		return velocity;
 	}
+
+
 
 }
