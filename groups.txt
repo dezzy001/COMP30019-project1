@@ -1,9 +1,0 @@
-Group Member 1:
-name: Derek Chen 
-username: derekc1
-student ID: 766509
-
-Group Member 2:
-name: Kevin Gong Liu
-username: liuk3
-student ID: 766486
