@@ -8,8 +8,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*sources: utilised sections of code to help with the mouse movements - https://forum.unity3d.com/threads/fly-cam-simple-cam-script.67042/
- * 			-lines 70 - 72 (mentioned again below)
+/*sources: refered to sections of code to help with the mouse movements - https://forum.unity3d.com/threads/fly-cam-simple-cam-script.67042/
+ * 			code usage mentioned below
  * */
 
 
@@ -74,12 +74,12 @@ public class flightSim : MonoBehaviour {
 		/* https://forum.unity3d.com/threads/fly-cam-simple-cam-script.67042/
 		 * Used code from the website above, to perform the previous mouse position calculations*/
 
-
-
 	
 		prevMousePos = Input.mousePosition - prevMousePos ;
 		prevMousePos = new Vector3(-prevMousePos.y * camSensitivity, prevMousePos.x * camSensitivity, 0 );
 		prevMousePos = new Vector3(transform.eulerAngles.x + prevMousePos.x ,transform.eulerAngles.y + prevMousePos.y , 0);
+
+		/* code usage ends here...*/
 
 			//prevent the camera to fully rotate downwards, to prevent the camera to glitch out and flip the view 
 		if (prevMousePos.x > 85 && prevMousePos.x > 0 && prevMousePos.x < 90) {

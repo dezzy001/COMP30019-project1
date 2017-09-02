@@ -1,11 +1,12 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\flightSim.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PhongShader.shader">
     <Files>
-      <File FileName="Assets\DiamondSquareTerrain.cs" Line="1" Column="1" />
-      <File FileName="Assets\flightSim.cs" Line="86" Column="74" />
-      <File FileName="Assets\PhongShader.shader" Line="1" Column="1" />
-      <File FileName="Assets\PointLight.cs" Line="23" Column="36" />
+      <File FileName="Assets\DiamondSquareTerrain.cs" Line="242" Column="30" />
+      <File FileName="Assets\XAxisSpin.cs" Line="1" Column="1" />
+      <File FileName="Assets\flightSim.cs" Line="81" Column="3" />
+      <File FileName="Assets\PointLight.cs" Line="1" Column="1" />
+      <File FileName="Assets\PhongShader.shader" Line="117" Column="45" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

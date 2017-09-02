@@ -31,7 +31,7 @@
 //UNITY_SHADER_NO_UPGRADE
 
 
-//NOTE: used the phong shader from lab 4, adjusting the diffuse and specular constants
+//NOTE: used the phong shader from lab 4, ony adjusting the diffuse and specular constants
 
 Shader "Unlit/PhongShader"
 {

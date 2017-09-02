@@ -22,6 +22,7 @@ public class PointLight : MonoBehaviour {
 		//offset of the sun away from the terrain boundaries
 		float sizeOffset = terrain.size/2;
 
+		//the raduis of the sun rotation around the origin
 		transform.position = new Vector3 (0.0f, 0.0f, terrain.size/2 + sizeOffset);
 
 

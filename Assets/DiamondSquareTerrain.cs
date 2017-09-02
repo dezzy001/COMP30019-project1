@@ -56,16 +56,14 @@ public class DiamondSquareTerrain : MonoBehaviour {
 
 		/*LAB 4 - cubescript code snippet*/
 
-		// Add a MeshFilter component to this entity. This essentially comprises of a
-		// mesh definition, which in this example is a collection of vertices, colours 
-		// and triangles (groups of three vertices). 
+		// initialise a mesh filter for the terrain mesh
 		MeshFilter terrainMesh = this.gameObject.AddComponent<MeshFilter>();
 		terrainMesh.mesh = this.createTerrain();
 
 		// Add a MeshRenderer component. This component actually renders the mesh that
 		// is defined by the MeshFilter component.
 		MeshRenderer renderer = this.gameObject.AddComponent<MeshRenderer>();
-		renderer.material.shader = shader;
+		renderer.material.shader = shader; // apply the PhongShader to the mesh
 
 
 	}
@@ -91,13 +89,11 @@ public class DiamondSquareTerrain : MonoBehaviour {
 	Mesh createTerrain(){
 
 
-		/*Step 1: initialse terrain base, i.e a 2D square array of width and height (2^n) + 1 - i.e number of faces (divisons) + 1 */
+		/*Step 1: initialse terrain base, i.e a 2D square array of width and height (2^n) + 1 - i.e number of divisons + 1 */
 
 		numVerts = (numDivisions+1)*(numDivisions+1); //initialise total number of divisions
 		//initilaise the verticies, using just an 1d array to represent a 2d square (as we know the square parameters)
 		verts = new Vector3[numVerts];
-		//number of uv coordinates is equal to number of vertices
-		Vector2[] uvs = new Vector2[numVerts];
 
 		//number verticies for triangles = (number of divisions ^ 2) * 2 (two triangles in a square) * 3 (each triangle is defined by 3 verticies)
 		int[] triangles = new int[numDivisions*numDivisions*2*3];
@@ -119,8 +115,7 @@ public class DiamondSquareTerrain : MonoBehaviour {
 
 				//step through verticies row by row, represented in a 1d array. Set up the square base of the entire terrain (i.e when height = 0)
 				verts[i*(numDivisions+1)+j] = new Vector3(-halfSize+j*divisionSize, 0.0f, halfSize-i*divisionSize);
-				//spreads out one texture to the whole terrain
-				uvs[i*(numDivisions+1)+j] = new Vector2((float)i/numDivisions,(float)j/numDivisions);
+
 
 				//only need to make traingles when we are less than numDivisions, for the rows and columns
 				if(i < numDivisions && j < numDivisions){
@@ -161,7 +156,7 @@ public class DiamondSquareTerrain : MonoBehaviour {
 		/*step 3: diamond and square steps*/
 
 		/*the number of times (iterations) which you have to perform a diamond-square algorithms 
-		(note: log^2(num of divisons) gives the number of times you have to perform, since there are 2^n faces)
+		(note: log^2(num of divisons) gives the number of times you have to perform, since there are 2^n divisions)
 		*/
 		int iterations = (int)Mathf.Log(numDivisions,2);
 		int numSquares = 1; //variable that holds number of squares for each iteration
@@ -172,7 +167,7 @@ public class DiamondSquareTerrain : MonoBehaviour {
 
 			int row = 0;
 
-			//loop j and k are for the square steps
+			//loop j and k are for the square and diamond steps
 			for(int j =0; j < numSquares; j++){
 
 				int col = 0;
@@ -201,10 +196,6 @@ public class DiamondSquareTerrain : MonoBehaviour {
 
 
 
-		//assign all the variables to the mesh to be rendered
-		mesh.vertices = verts;
-		mesh.uv = uvs;
-		mesh.triangles = triangles;
 
 		//find the maximum height of the generated terrain
 		for (int i = 0; i < verts.Length; i++) {
@@ -228,7 +219,7 @@ public class DiamondSquareTerrain : MonoBehaviour {
 
 			}else if (verts [i].y > -currMaxHeight*0.1 && verts [i].y < currMaxHeight*0.55) {
 				
-				terrainColor [i] = new Color(0.0f,0.45f,0.0f,1.0f); // grass
+				terrainColor [i] = new Color(0.0f,0.45f,0.0f,1.0f); // grassland
 
 			}else if (verts [i].y > -currMaxHeight*0.2 && verts [i].y < -currMaxHeight*0.1) {
 
@@ -246,6 +237,10 @@ public class DiamondSquareTerrain : MonoBehaviour {
 
 		}
 
+		//assign all the variables to the mesh to be rendered
+		mesh.vertices = verts;
+		mesh.triangles = triangles;
+		//apply the colours to the mesh
 		mesh.colors = terrainColor;
 
 		mesh.RecalculateBounds ();
@@ -277,16 +272,18 @@ public class DiamondSquareTerrain : MonoBehaviour {
 		int midPoint = (int)(row + halfSize) * (numDivisions + 1) +(int)(col+halfSize); 
 
 		//step 1: diamond step
-		//assign the midpoint vertex to the average of the corner verticies plus a random value (to give realism to the terrain)
+		//perform diamond step - assign the height of the squares midpoint to the average of its corners (i.e diamond mid points) + plus a random value
 		verts [midPoint].y = (verts [topLeft].y + verts [topRight].y + verts [botLeft].y + verts [botRight].y) * 0.25f + Random.Range(-heightOffset,heightOffset);
 
 		//step 2: square step
-		//assign each diamond corners by averaging the previous 2 ajacent square corners and the mid point, then plus a random value to it
+		//assign each diamonds midpoint's height to the average of the 2 ajacent square corners and squares midpoint + plus a random value 
 		verts[topLeft+halfSize].y = (verts[topLeft].y + verts[topRight].y + verts[midPoint].y)/3 + Random.Range(-heightOffset,heightOffset) ; //top corner point
 		verts[midPoint-halfSize].y = (verts[topLeft].y + verts[botLeft].y + verts[midPoint].y)/3 + Random.Range(-heightOffset,heightOffset) ; //left corner point
 		verts[midPoint+halfSize].y = (verts[topRight].y + verts[botRight].y + verts[midPoint].y)/3 + Random.Range(-heightOffset,heightOffset) ;//right corner point
 		verts[botLeft+halfSize].y = (verts[botLeft].y + verts[botRight].y + verts[midPoint].y)/3 + Random.Range(-heightOffset,heightOffset) ;//bottom corner point
 
+
+		//NOTE: random value gives terrain realism
 
 	}
 
